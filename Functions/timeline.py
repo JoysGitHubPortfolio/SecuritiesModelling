@@ -4,7 +4,6 @@ import datetime as dt
 import matplotlib.pyplot as plt
 
 # Fetch the ticker data for security
-
 def Get5YSecurityPlot(security: str) -> pd.DataFrame:
     object = yf.Ticker(security)
     history = object.history(period="5y")

@@ -4,7 +4,7 @@ Root/
     - Q1.ipynb
     - Q2.ipynb
     - Q3.ipynb
-    - Analysis.ipynb
+    - Strategy.ipynb
 - Data/
     - inflation.csv
 - Functions/
