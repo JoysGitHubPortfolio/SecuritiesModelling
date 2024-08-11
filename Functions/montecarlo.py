@@ -53,10 +53,10 @@ def main():
     num_simulations = 1000
 
     # Expected returns & volatilities for each asset
-    R = 0.25
+    R = 0
     assets = ['Asset A', 'Asset B']
-    expected_returns = np.array([0.025, 0.05])  
-    volatilities = np.array([0.35, 0.70])
+    expected_returns = np.array([0.15, 0.15])  
+    volatilities = np.array([0.05, 0.05])
     print(assets, expected_returns, volatilities, R)
 
     # Test out different iterations of portfolio weights
