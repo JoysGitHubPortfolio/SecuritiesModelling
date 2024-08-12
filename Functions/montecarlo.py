@@ -1,5 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import stats
+
+
+def histogram_mode(values):
+    num_bins = int(np.ceil(np.log2(len(values)) + 1))
+    hist, bin_edges = np.histogram(values, bins=num_bins)
+    max_freq_index = np.argmax(hist)
+    mode = (bin_edges[max_freq_index] + bin_edges[max_freq_index + 1]) / 2
+    return mode
 
 def MonteCarlo(initial_portfolio_value, years, num_simulations, expected_returns, volatilities, weights, R, plot):
     # Calculate the covariance matrix
@@ -17,6 +26,7 @@ def MonteCarlo(initial_portfolio_value, years, num_simulations, expected_returns
         final_values.append(portfolio_value)
 
     # Calculate statistics
+    mode_value = histogram_mode(final_values)
     mean_value = np.mean(final_values)
     median_value = np.median(final_values)
     percentile_5 = np.percentile(final_values, 5)
@@ -24,19 +34,20 @@ def MonteCarlo(initial_portfolio_value, years, num_simulations, expected_returns
 
     # Plot results
     def PlotReturnHistogram():
-        print(f"Mean final portfolio value: ${mean_value:.2f}")
-        print(f"Median final portfolio value: ${median_value:.2f}")
-        print(f"5th percentile: ${percentile_5:.2f}")
-        print(f"95th percentile: ${percentile_95:.2f}")
+        print(f"Mode final portfolio value: £{mode_value:.2f}")
+        print(f"Mean final portfolio value: £{mean_value:.2f}")
+        print(f"Median final portfolio value: £{median_value:.2f}")
+        print(f"5th percentile: £{percentile_5:.2f}")
+        print(f"95th percentile: £{percentile_95:.2f}")
 
         plt.hist(final_values, bins=50, alpha=0.75)
-        plt.title('Monte Carlo Simulation of Portfolio Value')
+        plt.title(f'Monte Carlo Simulation of Portfolio Value Given £{initial_portfolio_value} Initial Investment after {years} years')
         plt.xlabel('Portfolio Value')
         plt.ylabel('Frequency')
         plt.show()
     if plot:
         PlotReturnHistogram()
-    return median_value
+    return mode_value, mean_value, median_value, percentile_5, percentile_95
 
 def PlotExpectedReturns(assets, final_medians):
     labels = list(final_medians.keys())
@@ -66,7 +77,6 @@ def main():
         weight_a = i/n
         weight_b = 1 - weight_a
         weights = np.array([weight_a, weight_b]) 
-
         median = MonteCarlo(initial_portfolio_value=initial_portfolio_value,
                             years=years,
                             num_simulations=num_simulations,
@@ -77,7 +87,6 @@ def main():
                             plot=False)
         final_medians[weight_a] = median
         print(weights, median)
-
     PlotExpectedReturns(assets=assets, final_medians=final_medians)
 
 # Call program for example data
